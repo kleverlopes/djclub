@@ -263,6 +263,13 @@ body{padding-bottom:90px}
 .gal-cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
 .yt{background:#e00;color:#fff}.yt:hover{background:#ff1a1a;transform:translateY(-1px)}
 .gal.off{pointer-events:none}
+.extras{display:grid;gap:16px}
+.ex-group{display:grid;gap:8px}
+.check.ex{align-items:flex-start}
+.check.ex input{margin-top:2px;flex:none}
+.check.ex span{display:grid;gap:2px;min-width:0}
+.check.ex b{font-weight:600;font-size:14px}
+.check.ex small{margin:0;font-family:var(--body);font-size:12.5px;line-height:1.4;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -354,7 +361,7 @@ body{padding-bottom:90px}
         </div>
         <div class="group" data-only="eu">
           <h3>Estrutura à la carte</h3>
-          <div class="checks" id="extras"></div>
+          <div id="extras" class="extras"></div>
           <div class="field"><label for="msg">Mais alguma coisa?</label><textarea id="msg" rows="2" placeholder="Tema da festa, horário de silêncio do salão, surpresas…"></textarea></div>
         </div>
         <div class="group">
@@ -447,7 +454,19 @@ const MOMENTOS={"Casamento":["Cerimônia","Entrada dos noivos","Primeira dança"
  "Festa junina":["Quadrilha","Casamento caipira","Forró","Saideira"],
  "Réveillon":["Jantar","Contagem regressiva","Fogos","After"],
  "Balada":["Abertura","Atração principal","After"]};
-const EXTRAS=["Iluminação de pista","Som para cerimônia","Microfone para discursos","Máquina de fumaça","Painel de LED","Pista de LED","Animador / MC","Kit neon e glow"];
+const EXTRAS=[
+ {g:"Som",itens:[
+  ["Caixas de som ativas (tops)","Caixas principais nos tripés, para médios e agudos. De 2 a 4, conforme o salão.",1],
+  ["Subwoofers (graves)","Caixas grandes no chão que dão o peso e a batida da pista.",1],
+  ["Mesa de som","Liga o equipamento do DJ e os microfones e controla volume e equalização.",1],
+  ["Microfones para discursos","1 sem fio para anúncios, cerimonial e convidados, e 1 com fio de reserva.",1],
+  ["Som para cerimônia","Som separado para a cerimônia, antes da festa.",0]]},
+ {g:"Iluminação e efeitos",itens:[
+  ["Moving heads (beams ou spots)","Luzes robóticas que se movimentam e criam feixes coloridos na pista.",0],
+  ["Refletores de LED (Par LED)","Dão cor ao ambiente: paredes, teto ou a cabine do DJ.",0],
+  ["Máquina de fumaça","Destaca os feixes de luz no ar e cria o clima de balada.",0],
+  ["Lasers ou strobo","Efeitos de luz para os momentos de pico da pista.",0]]}
+];
 const LOW=["MPB","Jazz & Lounge","Românticas","Gospel","Samba"],HIGH=["Funk","Trap","Rap / Hip-hop","Techno","Eletrônica","Reggaeton","Piseiro"];
 
 const $=s=>document.querySelector(s);
@@ -561,7 +580,7 @@ function renderTipo(){
 }
 $("#tipoChips").onclick=e=>{const b=e.target.closest(".chip");if(b){brief.tipo=b.dataset.v;renderTipo();update()}};
 function setTipo(t){brief.tipo=t;renderTipo();update()}
-$("#extras").innerHTML=EXTRAS.map((x,i)=>`<label class="check"><input type="checkbox" id="ex-${i}" value="${x}" ${i===0?"checked":""}>${x}</label>`).join("");
+{let n=0;$("#extras").innerHTML=EXTRAS.map(grp=>`<div class="ex-group"><span class="lbl">${grp.g}</span><div class="checks">${grp.itens.map(([nome,desc,on])=>`<label class="check ex"><input type="checkbox" id="ex-${n++}" value="${nome}" ${on?"checked":""}><span><b>${nome}</b><small>${desc}</small></span></label>`).join("")}</div></div>`).join("")}
 const dt=new Date();dt.setMonth(dt.getMonth()+3);$("#data").value=dt.toISOString().slice(0,10);$("#data").min=new Date().toISOString().slice(0,10);
 if($("#quick")){$("#quick").innerHTML=EVENTS.map(e=>`<button type="button" class="chip" data-v="${e}" aria-pressed="false">${e}</button>`).join("");
 $("#quick").onclick=e=>{const b=e.target.closest(".chip");if(b){setTipo(b.dataset.v);$("#festa").scrollIntoView({behavior:"smooth"})}}};
