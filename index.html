@@ -248,6 +248,9 @@ body{padding-bottom:90px}
 .hero-v2 .eq{z-index:1;opacity:.35}
 .hero-v2.has-photo .hero-bg::after{background:linear-gradient(270deg,rgba(13,7,21,.95) 0%,rgba(13,7,21,.82) 40%,rgba(13,7,21,.1) 72%),linear-gradient(0deg,var(--bg) 0%,transparent 25%)}
 @media (max-width:760px){.hero-v2.has-photo .hero-copy{margin-left:0}.hero-v2.has-photo .hero-bg img{object-position:22% 30%}.hero-v2.has-photo .hero-bg::after,.hero-bg::after{background:linear-gradient(0deg,rgba(13,7,21,.96) 30%,rgba(13,7,21,.55) 100%)}.hero-logo{height:72px}.hero-v2 .wrap{padding-block:48px 80px}}
+.chips-no .chip[aria-pressed="true"]{color:#fff;border-color:#ff5c8a;background:rgba(255,92,138,.16);box-shadow:inset 0 0 0 1px #ff5c8a;text-decoration:line-through;text-decoration-thickness:1.5px}
+.lbl-no{color:#ff8fb0}
+.tag-no{background:rgba(255,92,138,.16);color:#ffc2d3;text-decoration:line-through}
 </style>
 </head>
 <body>
@@ -329,17 +332,18 @@ body{padding-bottom:90px}
           <div class="field"><span class="lbl">Idade da maioria dos convidados</span><div class="multi" id="idadeChips"></div></div>
           <div class="field"><label for="clima">Clima da pista</label><input type="range" id="clima" min="1" max="5" value="4"><div class="clima-scale"><span>Mais tranquilo</span><span id="climaOut"></span><span>Pista pegando fogo</span></div></div>
         </div>
-        <div class="group" data-only="eu">
+        <div class="group">
           <h3>A música</h3>
-          <div class="field"><span class="lbl">Estilos musicais</span><div class="multi" id="estiloChips"></div></div>
+          <div class="field"><span class="lbl">Estilos que vocês curtem</span><div class="multi" id="estiloChips"></div></div>
+          <div class="field"><span class="lbl lbl-no">Estilos que não podem tocar</span><div class="multi chips-no" id="naoChips"></div></div>
+          <div class="two">
+            <div class="field"><label for="falta">Músicas que não podem faltar</label><textarea id="falta" rows="3" placeholder="Ex.: Evidências, a música da entrada, aquela do casal…"></textarea></div>
+            <div class="field"><label for="proibido">Músicas que não podem tocar</label><textarea id="proibido" rows="3" placeholder="Músicas ou artistas que vocês não querem de jeito nenhum"></textarea></div>
+          </div>
         </div>
         <div class="group">
           <h3>Momentos especiais</h3>
           <div class="checks" id="momentos"></div>
-          <div class="two" data-only="eu">
-            <div class="field"><label for="falta">Não pode faltar</label><textarea id="falta" rows="3" placeholder="Músicas, artistas, a música da entrada…"></textarea></div>
-            <div class="field"><label for="proibido">Não tocar de jeito nenhum</label><textarea id="proibido" rows="3" placeholder="Estilos ou músicas que vocês não querem"></textarea></div>
-          </div>
         </div>
         <div class="group" data-only="eu">
           <h3>Estrutura à la carte</h3>
@@ -426,7 +430,7 @@ const MOMENTOS={"Casamento":["Cerimônia","Entrada dos noivos","Primeira dança"
  "Réveillon":["Jantar","Contagem regressiva","Fogos","After"],
  "Balada":["Abertura","Atração principal","After"]};
 const EXTRAS=["Iluminação de pista","Som para cerimônia","Microfone para discursos","Máquina de fumaça","Painel de LED","Pista de LED","Animador / MC","Kit neon e glow"];
-const LOW=["MPB","Lounge","Jazz","Deep House","Românticas","Bolero","Louvor"],HIGH=["Funk","Trap","Hip-hop","Techno","Tech House","Eletrônica","Reggaeton"];
+const LOW=["MPB","Jazz & Lounge","Românticas","Gospel","Samba"],HIGH=["Funk","Trap","Rap / Hip-hop","Techno","Eletrônica","Reggaeton","Piseiro"];
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -437,7 +441,8 @@ const media=d=>`<div class="media" data-id="${d.id}" style="--c:${d.c};--c2:${d.
 const genres=[...new Set(STYLES.flatMap(d=>d.generos))].sort((a,b)=>a.localeCompare(b,"pt"));
 const hasG=(d,g)=>g==="Todos"||d.generos.some(x=>x===g||x.includes(g));
 const state={ev:"Todos",genre:"Todos"};
-const brief={mode:"eu",formato:new Set(["Online"]),dias:new Set(),periodo:new Set(["Noite"]),tipo:"Casamento",idades:new Set(["20 a 35","35 a 50"]),estilos:new Set()};
+const GENEROS=["Sertanejo","Pagode","Samba","Forró","Piseiro","Arrocha","Axé","Funk","Trap","Rap / Hip-hop","Pop nacional","Pop internacional","MPB","Rock","Flashback","Disco","Eletrônica","House","Techno","Reggaeton","Românticas","Gospel","Jazz & Lounge","Infantil"];
+const brief={nao:new Set(),mode:"eu",formato:new Set(["Online"]),dias:new Set(),periodo:new Set(["Noite"]),tipo:"Casamento",idades:new Set(["20 a 35","35 a 50"]),estilos:new Set()};
 $("#footWa").textContent=WHATS_DJCLUB.replace(/^55(\d{2})(\d{4,5})(\d{4})$/,"($1) $2-$3");
 $("#footMail").textContent=EMAIL_DJCLUB;
 if(CANAL_YT)$("#footWa").insertAdjacentHTML("afterend",` · <a href="${CANAL_YT}" target="_blank" rel="noopener">Canal no YouTube</a>`);
@@ -496,7 +501,6 @@ function closeModal(){$("#modal").hidden=true;document.body.style.overflow="";la
 $("#mClose").onclick=closeModal;
 $("#modal").addEventListener("click",e=>{
   if(e.target.id==="modal")closeModal();
-  const q=e.target.closest("[data-add]");if(q){closeModal();if(!brief.estilos.has(q.dataset.add))toggleStyle(q.dataset.add);$("#festa").scrollIntoView({behavior:"smooth"})}
   const c=e.target.closest("[data-copy]");if(c)copyText(c);
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#modal").hidden)closeModal()});
@@ -514,16 +518,13 @@ function openProfile(id){
 }
 
 /* ---------- à la carte ---------- */
-function toggleStyle(id){
-  const d=STYLES.find(x=>x.id===id),add=!brief.estilos.has(id);
-  add?brief.estilos.add(id):brief.estilos.delete(id);
-  if(add&&brief.mode!=="eu")setMode("eu");
-  renderEstilos();update();
-}
 function renderEstilos(){
-  $("#estiloChips").innerHTML=STYLES.map(x=>`<button type="button" class="chip" data-v="${x.id}" aria-pressed="${brief.estilos.has(x.id)}">${x.nome}</button>`).join("");
+  $("#estiloChips").innerHTML=GENEROS.map(x=>`<button type="button" class="chip" data-v="${x}" aria-pressed="${brief.estilos.has(x)}">${x}</button>`).join("");
+  $("#naoChips").innerHTML=GENEROS.map(x=>`<button type="button" class="chip" data-v="${x}" aria-pressed="${brief.nao.has(x)}">${x}</button>`).join("");
 }
-$("#estiloChips").onclick=e=>{const b=e.target.closest(".chip");if(b)toggleStyle(b.dataset.v)};
+function pickGenre(set,other,v){if(set.has(v))set.delete(v);else{set.add(v);other.delete(v)}renderEstilos();update()}
+$("#estiloChips").onclick=e=>{const b=e.target.closest(".chip");if(b)pickGenre(brief.estilos,brief.nao,b.dataset.v)};
+$("#naoChips").onclick=e=>{const b=e.target.closest(".chip");if(b)pickGenre(brief.nao,brief.estilos,b.dataset.v)};
 $("#idadeChips").innerHTML=IDADES.map(x=>`<button type="button" class="chip" data-v="${x}" aria-pressed="${brief.idades.has(x)}">${x}</button>`).join("");
 $("#idadeChips").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const v=b.dataset.v;brief.idades.has(v)?brief.idades.delete(v):brief.idades.add(v);b.setAttribute("aria-pressed",brief.idades.has(v));update()};
 function renderTipo(){
@@ -550,9 +551,9 @@ const multiChips=(id,items,set)=>{const el=$(id);el.innerHTML=items.map(x=>`<but
 multiChips("#diasChips",["Seg","Ter","Qua","Qui","Sex","Sáb"],brief.dias);
 multiChips("#periodoChips",["Manhã","Tarde","Noite"],brief.periodo);
 const CLIMA=["","Bem tranquilo","Animado sem exagero","Animado","Pista cheia","Pista pegando fogo"];
-const chosen=()=>STYLES.filter(s=>brief.estilos.has(s.id));
+
 function plan(){
-  const est=[...new Set(chosen().flatMap(s=>s.generos))],clima=+$("#clima").value;
+  const est=[...brief.estilos],clima=+$("#clima").value;
   const low=est.filter(g=>LOW.includes(g)),high=est.filter(g=>HIGH.includes(g)),mid=est.filter(g=>!LOW.includes(g)&&!HIGH.includes(g)&&g!=="Flashback");
   const moms=[...document.querySelectorAll("#momentos input:checked")].map(i=>i.value);
   const j=a=>a.slice(0,3).join(", ");
@@ -570,15 +571,17 @@ function update(){
   $("#climaOut").textContent=CLIMA[+$("#clima").value];
   const ex=[...document.querySelectorAll("#extras input:checked")].map(i=>i.value);
   const h=$("#horas").value||"?";
-  const pacote=[`DJ por ${h} h de música`,...chosen().map(s=>"Estilo "+s.nome),...ex];
+  const pacote=[`DJ por ${h} h de música`,...ex];
+  const musica=`${brief.estilos.size?`<div class="lbl" style="margin-bottom:6px">Estilos</div><div class="tags" style="margin-bottom:10px">${[...brief.estilos].map(g=>`<span class="tag">${g}</span>`).join("")}</div>`:""}${brief.nao.size?`<div class="lbl lbl-no" style="margin-bottom:6px">Não tocar</div><div class="tags" style="margin-bottom:14px">${[...brief.nao].map(g=>`<span class="tag tag-no">${g}</span>`).join("")}</div>`:""}`;
   if(brief.mode==="nos"){
     $("#preview").innerHTML=`<div class="tags" style="margin-bottom:14px"><span class="tag">${brief.tipo}</span><span class="tag">${$("#conv").value||"?"} convidados</span><span class="tag">${h} h de música</span>${[...brief.idades].map(i=>`<span class="tag">${i}</span>`).join("")}<span class="tag">${CLIMA[+$("#clima").value]}</span></div>
+     ${musica}
      ${(()=>{const mo=[...document.querySelectorAll("#momentos input:checked")].map(i=>i.value);return mo.length?`<div class="lbl" style="margin-bottom:6px">Momentos especiais</div><p style="margin:0 0 14px;font-size:14px">${mo.join(" · ")}</p>`:""})()}
      <ul class="meet" style="padding-left:18px;margin:0"><li>Lemos o que você contou e montamos uma proposta com estilo, roteiro da noite e estrutura.</li><li>Escalamos o DJ disponível na sua data.</li><li>Gravamos uma playlist para a sua festa no canal do DJ Club.</li><li>Apresentamos tudo numa reunião online e ajustamos com você.</li></ul>
      <div class="perfil"><span class="lbl">Reunião</span><strong>Online, por videochamada</strong>${[...brief.dias].join(", ")||"Qualquer dia"} · ${[...brief.periodo].join(", ")||"qualquer período"}</div>`;
     return;
   }
-  $("#preview").innerHTML=`<div class="lbl" style="margin-bottom:6px">Seu pacote</div><div class="tags" style="margin-bottom:14px">${pacote.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}</div><div class="lbl">Prévia da trilha</div>`+
+  $("#preview").innerHTML=`<div class="lbl" style="margin-bottom:6px">Seu pacote</div><div class="tags" style="margin-bottom:14px">${pacote.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}</div>${musica}<div class="lbl">Prévia da trilha</div>`+
    plan().map(([t,s,e])=>`<div class="blk"><b>${t}</b><code>${Math.round(Math.min(e,1)*100)}% energia</code><span>${esc(s)}</span><div class="bar"><i style="width:${Math.min(e,1)*100}%"></i></div></div>`).join("")+
    `<div class="perfil"><span class="lbl">Próximo passo</span><strong>Reunião online</strong>Apresentamos o orçamento para a sua data e a playlist no canal do DJ Club.</div>`;
 }
@@ -592,11 +595,11 @@ function briefingText(code){
   const L=[`*Pedido de proposta DJ Club ${code}*`,``,`Nome: ${v("nome")}`,`WhatsApp: ${v("whats")}`,``,
    `Evento: ${brief.tipo}`,`Data: ${dataBR} · início ${v("inicio")||"?"} · ${v("horas")} h de música`,`Local: ${v("cidade")}`,`Convidados: ${v("conv")}`,
    `Público: ${[...brief.idades].join(", ")||"-"}`,`Clima da pista: ${CLIMA[+v("clima")]}`,`Momentos: ${moms.join(", ")||"-"}`,
-   ``,`Modo: ${brief.mode==="eu"?"Montou à la carte":"Quer que o DJ Club monte"}`];
+   ``,`Estilos que curtem: ${[...brief.estilos].join(", ")||"-"}`,`Estilos proibidos: ${[...brief.nao].join(", ")||"-"}`];
+  if(v("falta"))L.push(`Músicas que não podem faltar: ${v("falta")}`);
+  if(v("proibido"))L.push(`Músicas que não podem tocar: ${v("proibido")}`);
+  L.push(``,`Modo: ${brief.mode==="eu"?"Montou à la carte":"Quer que o DJ Club monte"}`);
   if(brief.mode==="eu"){
-    L.push(`Estilos: ${chosen().map(s=>s.nome).join(", ")||"-"}`);
-    if(v("falta"))L.push(`Não pode faltar: ${v("falta")}`);
-    if(v("proibido"))L.push(`Não tocar: ${v("proibido")}`);
     L.push(`Estrutura: ${ex.join(", ")||"só o som"}`);
     if(v("msg"))L.push(`Obs.: ${v("msg")}`);
   }else{L.push(`Sobre a festa: ${v("conta")||"-"}`)}
