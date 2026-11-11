@@ -234,14 +234,18 @@ footer img{height:36px}
 .card.added{border-color:var(--magenta);box-shadow:0 0 0 1px var(--magenta),0 12px 40px -18px rgba(255,43,214,.7)}
 .added-flag{position:absolute;top:12px;left:12px;z-index:2;padding:4px 10px;border-radius:999px;background:var(--magenta);color:#fff;font-size:12px;font-weight:700}
 body{padding-bottom:90px}
-.hero-v2{min-height:min(640px,88vh);display:flex;align-items:center}
+.hero-v2{min-height:min(600px,82vh);display:flex;align-items:center}
 .hero-v2::before{display:none}
 .hero-v2 .wrap{display:block;width:100%;position:relative;z-index:2;padding-block:72px 96px}
 .hero-copy{max-width:600px}
 .hero-v2.has-photo .hero-copy{margin-left:auto}
 .hero-v2.has-photo .hero-bg img{object-position:30% 40%}
 .hero-logo{height:96px;width:auto;display:block;margin-bottom:18px;filter:drop-shadow(0 0 24px rgba(255,43,214,.45))}
-.hero-v2 .lead{color:#d6c8e8}
+.hero-v2 h1{font-size:clamp(38px,6vw,76px)}
+.scroll-cue{display:inline-flex;align-items:center;gap:10px;margin-top:34px;color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.scroll-cue i{font-style:normal;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);color:var(--fg);animation:cue 1.8s ease-in-out infinite}
+.scroll-cue:hover{color:var(--fg)}.scroll-cue:hover i{border-color:var(--magenta)}
+@keyframes cue{50%{transform:translateY(5px)}}
 .hero-bg{position:absolute;inset:0;z-index:0;background:#0b0512}
 .hero-bg canvas,.hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
 .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,7,21,.94) 0%,rgba(13,7,21,.78) 38%,rgba(13,7,21,.15) 75%),linear-gradient(0deg,var(--bg) 0%,transparent 30%)}
@@ -270,14 +274,7 @@ body{padding-bottom:90px}
       <img class="hero-logo" src="logo.png" alt="DJ Club">
       <div class="eyebrow">DJs para casamentos, festas e eventos</div>
       <h1 style="margin-top:14px">A trilha da sua festa, <em>do jeito que você sonhou.</em></h1>
-      <p class="lead">Escolha os estilos, os momentos e a estrutura que a sua festa precisa, ou conte como imagina e a gente monta para você. Depois marcamos uma reunião online para apresentar a proposta e a playlist da sua festa.</p>
-      <div class="lbl" style="margin-bottom:10px">Que festa você vai fazer?</div>
-      <div class="quick" id="quick"></div>
-      <div class="hero-cta">
-        <a class="btn btn-hot" href="#festa">Montar minha festa</a><a class="btn btn-ghost" href="#festa" id="heroNos">Montem pra mim</a>
-        
-      </div>
-      <div class="readout"><span><b>2</b> jeitos de montar</span><span>Reunião <b>online</b></span><span>Resposta em até <b>24 h</b></span></div>
+      <a class="scroll-cue" href="#como-funciona" aria-label="Ver como funciona"><span>Como funciona</span><i aria-hidden="true">↓</i></a>
     </div>
   </div>
   <div class="eq" id="eq" aria-hidden="true"></div>
@@ -536,8 +533,8 @@ $("#tipoChips").onclick=e=>{const b=e.target.closest(".chip");if(b){brief.tipo=b
 function setTipo(t){brief.tipo=t;renderTipo();update()}
 $("#extras").innerHTML=EXTRAS.map((x,i)=>`<label class="check"><input type="checkbox" id="ex-${i}" value="${x}" ${i===0?"checked":""}>${x}</label>`).join("");
 const dt=new Date();dt.setMonth(dt.getMonth()+3);$("#data").value=dt.toISOString().slice(0,10);$("#data").min=new Date().toISOString().slice(0,10);
-$("#quick").innerHTML=EVENTS.map(e=>`<button type="button" class="chip" data-v="${e}" aria-pressed="false">${e}</button>`).join("");
-$("#quick").onclick=e=>{const b=e.target.closest(".chip");if(b){setTipo(b.dataset.v);$("#festa").scrollIntoView({behavior:"smooth"})}};
+if($("#quick")){$("#quick").innerHTML=EVENTS.map(e=>`<button type="button" class="chip" data-v="${e}" aria-pressed="false">${e}</button>`).join("");
+$("#quick").onclick=e=>{const b=e.target.closest(".chip");if(b){setTipo(b.dataset.v);$("#festa").scrollIntoView({behavior:"smooth"})}}};
 
 /* modo: eu monto / montem pra mim */
 function setMode(m){brief.mode=m;
@@ -545,7 +542,7 @@ function setMode(m){brief.mode=m;
   document.querySelectorAll("[data-only]").forEach(g=>g.hidden=g.dataset.only!==m);
   $("#pvTitle").textContent=m==="eu"?"Sua festa à la carte":"O DJ Club monta para você";update()}
 document.querySelector(".modes").onclick=e=>{const b=e.target.closest(".mode");if(b)setMode(b.dataset.mode)};
-$("#heroNos").onclick=()=>setMode("nos");
+
 const multiChips=(id,items,set)=>{const el=$(id);el.innerHTML=items.map(x=>`<button type="button" class="chip" data-v="${x}" aria-pressed="${set.has(x)}">${x}</button>`).join("");
   el.onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const v=b.dataset.v;set.has(v)?set.delete(v):set.add(v);b.setAttribute("aria-pressed",set.has(v));update()}};
 multiChips("#diasChips",["Seg","Ter","Qua","Qui","Sex","Sáb"],brief.dias);
