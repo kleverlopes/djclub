@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<title>DJ Club · DJs para festas e eventos</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="DJ Club: DJs para casamentos, bodas, debutantes, aniversários, formaturas e eventos corporativos. Monte sua festa e receba uma proposta personalizada.">
+<meta property="og:title" content="DJ Club">
+<meta property="og:description" content="A trilha da sua festa, do jeito que você sonhou.">
+<meta property="og:image" content="hero.jpg">
+<meta name="theme-color" content="#0d0715">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+/* Layout: dark club stage — sticky deck header, hero with logo + live EQ, filterable vinyl-card catalog, booking form with live estimate. Single dark look by choice. */
+:root{
+  --bg:#0d0715; --surface:#170c22; --surface-2:#211330; --line:#33204a;
+  --fg:#f5eefb; --muted:#a998be; --magenta:#ff2bd6; --violet:#8b2cff; --blue:#2f6bff;
+  --ok:#3ee0a1;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --r:14px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--magenta)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--magenta);outline-offset:3px;border-radius:6px}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:24px;padding-block:10px}
+.brand img{height:44px;width:auto;display:block}
+nav.links{display:flex;gap:22px;margin-left:auto;font-weight:600;font-size:15px}
+nav.links a{text-decoration:none;color:var(--muted)}
+nav.links a:hover{color:var(--fg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;text-decoration:none;transition:transform .15s,box-shadow .2s,background .2s}
+.btn-hot{background:linear-gradient(100deg,var(--magenta),var(--violet));color:#fff;box-shadow:0 0 0 0 rgba(255,43,214,0)}
+.btn-hot:hover{transform:translateY(-1px);box-shadow:0 8px 30px -6px rgba(255,43,214,.6)}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--fg)}
+.btn-ghost:hover{border-color:var(--magenta)}
+header .btn{padding:9px 18px}
+@media (max-width:760px){nav.links{display:none} header .btn{margin-left:auto}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero::before{content:"";position:absolute;inset:-30% -10% auto;height:120%;background:radial-gradient(600px 380px at 78% 40%,rgba(139,44,255,.35),transparent 70%),radial-gradient(500px 300px at 15% 90%,rgba(255,43,214,.18),transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding-block:64px 56px}
+.hero h1{font-size:clamp(34px,5.4vw,64px);font-weight:800}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--blue),var(--violet) 45%,var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{color:var(--muted);font-size:18px;max-width:46ch;margin:18px 0 26px}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-art{position:relative;display:grid;place-items:center;min-width:0}
+.hero-art img{width:100%;max-width:520px;filter:drop-shadow(0 0 40px rgba(255,43,214,.35))}
+.eq{position:absolute;inset:auto 0 -6px;height:70px;display:flex;align-items:flex-end;justify-content:center;gap:5px;opacity:.5;pointer-events:none}
+.eq i{width:6px;border-radius:3px 3px 0 0;background:linear-gradient(var(--magenta),var(--blue));height:20%;animation:eq 1.1s ease-in-out infinite alternate}
+@keyframes eq{to{height:var(--h,80%)}}
+.readout{display:flex;gap:22px;flex-wrap:wrap;margin-top:30px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.readout b{color:var(--fg);font-weight:500}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-block:36px 40px}.hero-art{order:-1}.hero-art img{max-width:340px}}
+
+/* chips */
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s}
+.chip:hover{color:var(--fg);border-color:#5a3a7c}
+.chip[aria-pressed="true"]{color:#fff;border-color:var(--magenta);background:rgba(255,43,214,.14);box-shadow:inset 0 0 0 1px var(--magenta)}
+
+/* section */
+section.block{padding-block:72px}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.sec-head h2{font-size:clamp(26px,3.4vw,40px);margin-top:8px}
+.sec-head p{color:var(--muted);margin:10px 0 0;max-width:52ch}
+
+/* filters */
+.filters{display:grid;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:24px}
+.filters .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters .row.ctrls{gap:14px;margin-top:6px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label,.lbl{font-size:12px;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+select,input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],input[type=number],textarea{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-width:0}
+select:focus,input:focus,textarea:focus{border-color:var(--magenta);outline:none;box-shadow:0 0 0 3px rgba(255,43,214,.2)}
+.ctrls .field{flex:1 1 180px}
+.range-out{font-family:var(--mono);font-size:13px;color:var(--fg)}
+input[type=range]{width:100%;accent-color:var(--magenta)}
+.count{font-family:var(--mono);font-size:13px;color:var(--muted)}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:#6a3f95;transform:translateY(-2px)}
+.card-top{display:flex;gap:14px;align-items:center}
+.vinyl{flex:none;width:76px;height:76px;border-radius:50%;position:relative;background:repeating-radial-gradient(circle at 50% 50%,#0b0610 0 2px,#1d1228 2px 3px);box-shadow:0 0 0 2px #2a1a3a,0 8px 22px -8px var(--c,var(--violet));display:grid;place-items:center;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.vinyl::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,transparent 0 40deg,rgba(255,255,255,.09) 55deg,transparent 75deg 220deg,rgba(255,255,255,.06) 235deg,transparent 255deg)}
+.vinyl span{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 50% 50%,var(--bg) 0 3px,transparent 3.5px),linear-gradient(135deg,var(--c,var(--magenta)),var(--c2,var(--violet)));display:grid;place-items:center;font-family:var(--display);font-size:11px;font-weight:700;color:#fff;letter-spacing:.02em;position:relative;z-index:1}
+.card:hover .vinyl{transform:rotate(200deg)}
+.vinyl.big{width:120px;height:120px}.vinyl.big span{width:60px;height:60px;font-size:16px}
+.card h3{font-size:17px}
+.meta{font-size:14px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.star{color:#ffc94d}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:#dccdf0}
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;border-top:1px dashed var(--line);padding-top:12px}
+.spec .lbl{font-size:10.5px}
+.spec b{display:block;font-family:var(--mono);font-weight:500;font-size:14px;font-variant-numeric:tabular-nums}
+.card-actions{display:flex;gap:8px;margin-top:auto}
+.card-actions .btn{flex:1;padding:10px 12px;font-size:14px}
+.media{position:relative;margin:-20px -20px 0;aspect-ratio:16/10;max-width:none;border-radius:18px 18px 0 0;overflow:hidden;display:grid;place-items:center;cursor:pointer;background:radial-gradient(circle at 50% 120%,color-mix(in srgb,var(--c) 45%,transparent),transparent 65%),linear-gradient(150deg,#1e1030,#0f0818)}
+.media img{width:100%;height:100%;object-fit:cover}
+.media .vinyl.big{width:132px;height:132px}
+.card:hover .media .vinyl{transform:rotate(200deg)}
+.card:hover .card-top .vinyl{transform:none}
+.play{position:absolute;left:12px;bottom:12px;padding:7px 13px;border-radius:999px;background:rgba(13,7,21,.78);border:1px solid rgba(255,255,255,.18);font-size:13px;font-weight:700;text-decoration:none;backdrop-filter:blur(6px)}
+.play:hover{border-color:var(--magenta);color:#fff}
+.badge{position:absolute;right:12px;top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:rgba(13,7,21,.7);color:#dccdf0}
+.tag-btn{border:0;cursor:pointer;font-family:var(--body)}
+.tag-btn:hover,.tag-btn[aria-pressed="true"]{background:rgba(255,43,214,.2);color:#fff}
+.chip .n{font-family:var(--mono);font-size:11px;opacity:.65;margin-left:2px}
+.pfoto{width:120px;height:120px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px var(--magenta)}
+.empty{grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
+.step{padding:24px;border-radius:var(--r);background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--line)}
+.step::before{counter-increment:s;content:"0" counter(s);font-family:var(--mono);color:var(--magenta);font-size:13px}
+.step h3{font-size:18px;margin:10px 0 8px}
+.step p{margin:0;color:var(--muted)}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+
+/* booking */
+.book{display:grid;grid-template-columns:1.4fr .9fr;gap:22px;align-items:start}
+@media (max-width:900px){.book{grid-template-columns:1fr}}
+form.panel,.quote{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+form.panel{display:grid;gap:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media (max-width:560px){.two,.three{grid-template-columns:1fr}}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:560px){.checks{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:14px}
+.check input{accent-color:var(--magenta);width:18px;height:18px}
+.check small{margin-left:auto;font-family:var(--mono);color:var(--muted)}
+.check:has(input:checked){border-color:var(--magenta);background:rgba(255,43,214,.08)}
+.err{color:#ff7aa8;font-size:13px;min-height:0}
+.quote{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px)}
+.quote h3{font-size:16px;margin-bottom:14px}
+.qdj{display:flex;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.qdj .vinyl{width:52px;height:52px}.qdj .vinyl span{width:26px;height:26px;font-size:9px}
+.qline{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:5px 0;color:var(--muted)}
+.qline b{color:var(--fg);font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+.qtotal{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);margin-top:10px;padding-top:12px}
+.qtotal b{font-family:var(--display);font-size:24px;background:linear-gradient(90deg,var(--magenta),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.fine{font-size:12.5px;color:var(--muted);margin:12px 0 0}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(5,2,10,.72);backdrop-filter:blur(6px)}
+.sheet{width:min(720px,100%);max-height:100%;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px;position:relative}
+.close{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-size:18px;line-height:1}
+.prof-head{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.prof-head h3{font-size:24px}
+.sheet p.bio{color:#d9cdea;margin:0 0 18px}
+.roteiro{display:grid;gap:8px;margin:10px 0 20px}
+.rt{display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:center;font-size:14px;min-width:0}
+.rt .bar{height:8px;border-radius:4px;background:var(--surface-2);position:relative;overflow:hidden}
+.rt .bar i{position:absolute;inset:0 auto 0 0;border-radius:4px;background:linear-gradient(90deg,var(--blue),var(--magenta))}
+.rt code{font-family:var(--mono);font-size:12px;color:var(--muted)}
+@media (max-width:520px){.rt{grid-template-columns:1fr auto}.rt .bar{grid-column:1/-1;order:3}}
+.equip{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px}
+.done{text-align:center;padding:10px 0}
+.done .code{display:inline-block;font-family:var(--mono);font-size:20px;padding:10px 18px;border-radius:12px;border:1px dashed var(--magenta);margin:14px 0}
+.sum{text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:10px;font-size:14px}
+
+/* join + footer */
+.join{display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap;padding:30px;border-radius:20px;background:radial-gradient(400px 200px at 90% 0,rgba(255,43,214,.25),transparent),linear-gradient(120deg,#1b0d2e,#120a1e);border:1px solid var(--line)}
+.join h2{font-size:clamp(22px,2.6vw,30px)}
+.join p{margin:8px 0 0;color:var(--muted);max-width:54ch}
+footer{border-top:1px solid var(--line);padding-block:30px 40px;margin-top:72px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+footer img{height:36px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.multi{display:flex;flex-wrap:wrap;gap:8px}
+.preview .blk{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.preview .blk:last-child{border-bottom:0}
+.preview .blk b{font-size:14px}
+.preview .blk span{grid-column:1/-1;color:var(--muted);font-size:13px}
+.preview .blk .bar{grid-column:1/-1;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.preview .blk .bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--magenta));transition:width .4s}
+.preview .blk code{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.perfil{margin-top:14px;padding:14px;border-radius:12px;background:linear-gradient(140deg,rgba(255,43,214,.12),rgba(139,44,255,.08));border:1px solid rgba(255,43,214,.35);font-size:14px}
+.perfil strong{display:block;font-family:var(--display);font-size:15px;margin:4px 0}
+.clima-scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.group{display:grid;gap:14px;padding-top:16px;border-top:1px solid var(--line)}
+.group:first-child{border-top:0;padding-top:0}
+.group h3{font-size:15px;color:var(--fg)}
+.wa{background:#1fae5b;color:#fff}
+.wa:hover{background:#25c768}
+.sumtxt{white-space:pre-wrap;font-family:var(--mono);font-size:12.5px;line-height:1.6;max-height:240px;overflow:auto;user-select:all}
+.done .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+@media (max-width:640px){.modes{grid-template-columns:1fr}}
+.mode{text-align:left;cursor:pointer;padding:20px;border-radius:18px;border:1px solid var(--line);background:var(--surface);display:grid;gap:6px;transition:border-color .2s,background .2s}
+.mode b{font-family:var(--display);font-size:17px}
+.mode span{color:var(--muted);font-size:14px}
+.mode .tick{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mode[aria-pressed="true"]{border-color:var(--magenta);background:linear-gradient(150deg,rgba(255,43,214,.14),rgba(139,44,255,.06))}
+.mode[aria-pressed="true"] .tick{color:var(--magenta)}
+.meet{display:grid;gap:10px}
+.meet li{color:var(--muted);font-size:14px}
+.tray{position:fixed;left:0;right:0;bottom:0;z-index:30;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));padding-top:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--magenta);box-shadow:0 -10px 40px -10px rgba(255,43,214,.35);transition:transform .3s ease}
+.tray.off{transform:translateY(110%)}
+.tray-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.tray-lbl{flex:none;font-family:var(--display);font-size:14px;display:flex;align-items:center;gap:8px}
+.tray-lbl .num{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:13px;background:var(--magenta);color:#fff;font-size:13px;padding:0 6px}
+.tray-lbl .num.pop{animation:pop .45s ease}
+@keyframes pop{40%{transform:scale(1.45)}}
+.tray-items{display:flex;gap:6px;overflow-x:auto;min-width:0;flex:1;scrollbar-width:none}
+.tray-items::-webkit-scrollbar{display:none}
+.tray-item{flex:none;display:inline-flex;align-items:center;gap:6px;padding:6px 6px 6px 12px;border-radius:999px;background:rgba(255,43,214,.14);border:1px solid rgba(255,43,214,.45);font-size:13px;font-weight:600;white-space:nowrap}
+.tray-item button{width:22px;height:22px;border-radius:50%;border:0;background:rgba(255,255,255,.12);cursor:pointer;font-size:12px;line-height:1}
+.tray .btn{flex:none;padding:10px 18px;font-size:14px}
+@media (max-width:640px){.tray-lbl .t{display:none}}
+.toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:31;padding:10px 16px;border-radius:999px;background:var(--fg);color:var(--bg);font-weight:700;font-size:14px;transition:opacity .25s,transform .25s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.card.added{border-color:var(--magenta);box-shadow:0 0 0 1px var(--magenta),0 12px 40px -18px rgba(255,43,214,.7)}
+.added-flag{position:absolute;top:12px;left:12px;z-index:2;padding:4px 10px;border-radius:999px;background:var(--magenta);color:#fff;font-size:12px;font-weight:700}
+body{padding-bottom:90px}
+.hero-v2{min-height:min(640px,88vh);display:flex;align-items:center}
+.hero-v2::before{display:none}
+.hero-v2 .wrap{display:block;width:100%;position:relative;z-index:2;padding-block:72px 96px}
+.hero-copy{max-width:600px}
+.hero-v2.has-photo .hero-copy{margin-left:auto}
+.hero-v2.has-photo .hero-bg img{object-position:30% 40%}
+.hero-logo{height:96px;width:auto;display:block;margin-bottom:18px;filter:drop-shadow(0 0 24px rgba(255,43,214,.45))}
+.hero-v2 .lead{color:#d6c8e8}
+.hero-bg{position:absolute;inset:0;z-index:0;background:#0b0512}
+.hero-bg canvas,.hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,7,21,.94) 0%,rgba(13,7,21,.78) 38%,rgba(13,7,21,.15) 75%),linear-gradient(0deg,var(--bg) 0%,transparent 30%)}
+.hero-v2 .eq{z-index:1;opacity:.35}
+.hero-v2.has-photo .hero-bg::after{background:linear-gradient(270deg,rgba(13,7,21,.95) 0%,rgba(13,7,21,.82) 40%,rgba(13,7,21,.1) 72%),linear-gradient(0deg,var(--bg) 0%,transparent 25%)}
+@media (max-width:760px){.hero-v2.has-photo .hero-copy{margin-left:0}.hero-v2.has-photo .hero-bg img{object-position:22% 30%}.hero-v2.has-photo .hero-bg::after,.hero-bg::after{background:linear-gradient(0deg,rgba(13,7,21,.96) 30%,rgba(13,7,21,.55) 100%)}.hero-logo{height:72px}.hero-v2 .wrap{padding-block:48px 80px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#topo" aria-label="DJ Club"><img src="logo.png" alt="DJ Club"></a>
+    <nav class="links"><a href="#como-funciona">Como funciona</a><a href="#festa">Monte sua festa</a></nav>
+    <a class="btn btn-hot" href="#festa">Pedir orçamento</a>
+  </div>
+</header>
+
+<main id="topo">
+<section class="hero hero-v2">
+  <div class="hero-bg" id="heroBg" aria-hidden="true"><canvas id="stage"></canvas></div>
+  <div class="wrap">
+    <div class="hero-copy">
+      <img class="hero-logo" src="logo.png" alt="DJ Club">
+      <div class="eyebrow">DJs para casamentos, festas e eventos</div>
+      <h1 style="margin-top:14px">A trilha da sua festa, <em>do jeito que você sonhou.</em></h1>
+      <p class="lead">Escolha os estilos, os momentos e a estrutura que a sua festa precisa, ou conte como imagina e a gente monta para você. Depois marcamos uma reunião online para apresentar a proposta e a playlist da sua festa.</p>
+      <div class="lbl" style="margin-bottom:10px">Que festa você vai fazer?</div>
+      <div class="quick" id="quick"></div>
+      <div class="hero-cta">
+        <a class="btn btn-hot" href="#festa">Montar minha festa</a><a class="btn btn-ghost" href="#festa" id="heroNos">Montem pra mim</a>
+        
+      </div>
+      <div class="readout"><span><b>2</b> jeitos de montar</span><span>Reunião <b>online</b></span><span>Resposta em até <b>24 h</b></span></div>
+    </div>
+  </div>
+  <div class="eq" id="eq" aria-hidden="true"></div>
+</section>
+
+<section class="block" id="como-funciona">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow">Passo a passo</div><h2>Como funciona</h2><p>Você fala só com o DJ Club, do primeiro contato até o fim da festa.</p></div></div>
+    <div class="steps">
+      <div class="step"><h3>Monte ou peça para a gente montar</h3><p>Escolha à la carte os estilos, momentos e estrutura, ou só conte como imagina a festa que o DJ Club monta para você.</p></div>
+      <div class="step"><h3>Reunião online</h3><p>Marcamos uma videochamada para apresentar a proposta para a sua data e a playlist da festa no canal do DJ Club.</p></div>
+      <div class="step"><h3>Fechou, é festa</h3><p>Contrato e pagamento são com o DJ Club. Escalamos o DJ certo e no dia ele chega com tudo alinhado.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="festa" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow">Orçamento personalizado</div><h2>Monte sua festa</h2><p>Monte você mesmo, escolhendo item por item, ou deixe com a gente. Nos dois casos, marcamos uma reunião online para apresentar a proposta.</p></div></div>
+    <div class="modes" role="group" aria-label="Como você quer montar">
+      <button type="button" class="mode" data-mode="eu" aria-pressed="true"><span class="tick">Opção 1</span><b>Eu monto</b><span>Escolho os estilos, os momentos e a estrutura à la carte.</span></button>
+      <button type="button" class="mode" data-mode="nos" aria-pressed="false"><span class="tick">Opção 2</span><b>Montem pra mim</b><span>Conto como é a festa e o DJ Club monta a proposta.</span></button>
+    </div>
+    <div class="book">
+      <form class="panel" id="form" novalidate>
+        <div class="group">
+          <h3>Seus dados</h3>
+          <div class="two">
+            <div class="field"><label for="nome">Seu nome</label><input type="text" id="nome" autocomplete="name" placeholder="Ex.: Juliana Martins"></div>
+            <div class="field"><label for="whats">Seu WhatsApp</label><input type="tel" id="whats" autocomplete="tel" placeholder="(11) 98888-7777"></div>
+          </div>
+        </div>
+        <div class="group">
+          <h3>O evento</h3>
+          <div class="multi" id="tipoChips" role="group" aria-label="Tipo de evento"></div>
+          <div class="three">
+            <div class="field"><label for="data">Data</label><input type="date" id="data"></div>
+            <div class="field"><label for="inicio">Início da festa</label><input type="time" id="inicio" value="20:00"></div>
+            <div class="field"><label for="horas">Horas de música</label><input type="number" id="horas" min="2" max="12" value="5"></div>
+          </div>
+          <div class="two">
+            <div class="field"><label for="cidade">Cidade e local</label><input type="text" id="cidade" placeholder="Ex.: Espaço Villa Verde, São Paulo"></div>
+            <div class="field"><label for="conv">Convidados</label><input type="number" id="conv" min="10" step="10" value="150"></div>
+          </div>
+        </div>
+        <div class="group" data-only="nos" hidden>
+          <h3>Conte sobre a festa</h3>
+          <div class="field"><label for="conta">Como você imagina a festa?</label><textarea id="conta" rows="5" placeholder="Ex.: Casamento no campo, público de 25 a 60 anos. Queremos algo elegante no jantar e pista animada depois, com sertanejo e flashback. Ainda não sabemos o que precisa de estrutura."></textarea></div>
+        </div>
+        <div class="group">
+          <h3>O público</h3>
+          <div class="field"><span class="lbl">Idade da maioria dos convidados</span><div class="multi" id="idadeChips"></div></div>
+          <div class="field"><label for="clima">Clima da pista</label><input type="range" id="clima" min="1" max="5" value="4"><div class="clima-scale"><span>Mais tranquilo</span><span id="climaOut"></span><span>Pista pegando fogo</span></div></div>
+        </div>
+        <div class="group" data-only="eu">
+          <h3>A música</h3>
+          <div class="field"><span class="lbl">Estilos musicais</span><div class="multi" id="estiloChips"></div></div>
+        </div>
+        <div class="group">
+          <h3>Momentos especiais</h3>
+          <div class="checks" id="momentos"></div>
+          <div class="two" data-only="eu">
+            <div class="field"><label for="falta">Não pode faltar</label><textarea id="falta" rows="3" placeholder="Músicas, artistas, a música da entrada…"></textarea></div>
+            <div class="field"><label for="proibido">Não tocar de jeito nenhum</label><textarea id="proibido" rows="3" placeholder="Estilos ou músicas que vocês não querem"></textarea></div>
+          </div>
+        </div>
+        <div class="group" data-only="eu">
+          <h3>Estrutura à la carte</h3>
+          <div class="checks" id="extras"></div>
+          <div class="field"><label for="msg">Mais alguma coisa?</label><textarea id="msg" rows="2" placeholder="Tema da festa, horário de silêncio do salão, surpresas…"></textarea></div>
+        </div>
+        <div class="group">
+          <h3>Reunião online de apresentação</h3>
+          <p class="fine" style="margin:0">Vamos apresentar a proposta e a playlist por videochamada. Diga quando fica melhor para você.</p>
+          <div class="field"><span class="lbl">Melhores dias</span><div class="multi" id="diasChips"></div></div>
+          <div class="field"><span class="lbl">Melhor período</span><div class="multi" id="periodoChips"></div></div>
+        </div>
+        <div class="err" id="err" role="alert"></div>
+        <button class="btn btn-hot" type="submit" style="justify-self:start">Pedir proposta e agendar reunião</button>
+      </form>
+      <aside class="quote preview" aria-live="polite">
+        <h3 id="pvTitle">Sua festa à la carte</h3>
+        <div id="preview"></div>
+        <p class="fine">Na reunião online apresentamos o orçamento e a playlist da sua festa no canal do DJ Club.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="join">
+    <div><h2>Você é DJ?</h2><p>O DJ Club está montando o time. Se você toca em casamentos, aniversários e eventos e quer receber datas sem precisar correr atrás de cliente, fale com a gente.</p></div>
+    <a class="btn btn-ghost" href="#festa" id="joinBtn">Quero tocar no DJ Club</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="logo.png" alt="DJ Club">
+    <span>WhatsApp <b id="footWa" style="color:var(--fg);user-select:all"></b></span>
+    <span>E-mail <b id="footMail" style="color:var(--fg);user-select:all"></b></span>
+    <span>© 2026 DJ Club</span>
+  </div>
+</footer>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="sheet"><button class="close" id="mClose" aria-label="Fechar">✕</button><div id="mBody"></div></div>
+</div>
+
+<script>
+/* ===== Configurações do DJ Club ===== */
+const WHATS_DJCLUB="5511996610399";          // WhatsApp que recebe os pedidos (DDI + DDD + número)
+const EMAIL_DJCLUB="djclubfesta@gmail.com";
+const CANAL_YT="";
+const HERO_FOTO="hero.jpg";                           // foto de fundo do topo (ex.: foto do DJ tocando num evento)                            // link do canal do DJ Club no YouTube
+
+/* Catálogo: cada estilo pode ter foto (foto) e link do set no canal (set) */
+const STYLES=[
+ {id:"casamento",nome:"Casamento Clássico",generos:["Pop","MPB","House","Flashback"]},
+ {id:"romantico",nome:"Romântico & Bodas",generos:["Românticas","MPB","Bolero","Flashback"]},
+ {id:"sertanejo",nome:"Sertanejo & Pagode",generos:["Sertanejo","Pagode","Forró","Axé"]},
+ {id:"funk",nome:"Baile Funk & Trap",generos:["Funk","Trap","Hip-hop","Reggaeton"]},
+ {id:"flashback",nome:"Flashback 70·80·90",generos:["Flashback","Disco","Rock","Pop"]},
+ {id:"eletronico",nome:"Eletrônico",generos:["Eletrônica","House","Tech House","Techno"]},
+ {id:"lounge",nome:"Lounge & Sunset",generos:["Lounge","Deep House","Jazz","MPB"]},
+ {id:"teen",nome:"Debutante & Teen",generos:["Pop","Funk","Eletrônica","Sertanejo"]},
+ {id:"corporativo",nome:"Corporativo Premium",generos:["Disco","House","Pop","Lounge"]},
+ {id:"gospel",nome:"Gospel",generos:["Gospel","Louvor","Pop gospel"]},
+ {id:"arraia",nome:"Arraiá & Forró",generos:["Forró","Quadrilha","Sertanejo","Xote"]},
+ {id:"carnaval",nome:"Carnaval & Axé",generos:["Axé","Samba","Marchinhas","Pagode"]},
+ {id:"pool",nome:"Pool Party & Verão",generos:["Tropical House","Reggaeton","Funk","Pop"]},
+ {id:"estadio",nome:"Estádio & Esportes",generos:["Hinos de torcida","Pop","Funk","Eletrônica"]},
+ {id:"infantil",nome:"Infantil",generos:["Infantil","Pop","Trilhas de filmes"]}
+];
+
+const EVENTS=["Casamento","Bodas","Debutante","Aniversário","Aniversário infantil","Formatura","Corporativo","Festa esportiva","Festa temática","Festa junina","Réveillon","Balada"];
+const IDADES=["Crianças","Adolescentes","20 a 35","35 a 50","50+","60+"];
+const MOMENTOS={"Casamento":["Cerimônia","Entrada dos noivos","Primeira dança","Buquê","Homenagens","Saideira"],
+ "Bodas":["Renovação de votos","Entrada do casal","Dança do casal","Homenagem dos filhos e netos","Parabéns","Saideira"],
+ "Debutante":["Entrada da debutante","Valsa","Troca de vestido","Homenagens","Parabéns","Saideira"],
+ "Aniversário":["Entrada do aniversariante","Parabéns","Homenagens","Saideira"],
+ "Aniversário infantil":["Entrada do aniversariante","Brincadeiras","Parabéns","Lembrancinhas"],
+ "Formatura":["Entrada dos formandos","Valsa","Homenagens","Saideira"],
+ "Corporativo":["Abertura","Discurso / premiação","Happy hour","Encerramento"],
+ "Festa esportiva":["Entrada dos atletas","Hino","Premiação","Comemoração"],
+ "Festa temática":["Abertura","Concurso de fantasia","Parabéns","Saideira"],
+ "Festa junina":["Quadrilha","Casamento caipira","Forró","Saideira"],
+ "Réveillon":["Jantar","Contagem regressiva","Fogos","After"],
+ "Balada":["Abertura","Atração principal","After"]};
+const EXTRAS=["Iluminação de pista","Som para cerimônia","Microfone para discursos","Máquina de fumaça","Painel de LED","Pista de LED","Animador / MC","Kit neon e glow"];
+const LOW=["MPB","Lounge","Jazz","Deep House","Românticas","Bolero","Louvor"],HIGH=["Funk","Trap","Hip-hop","Techno","Tech House","Eletrônica","Reggaeton"];
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const vinyl=(d,cls="")=>`<div class="vinyl ${cls}" style="--c:${d.c};--c2:${d.c2}"><span>${d.ini}</span></div>`;
+const setBtn=(d,cls)=>d.set?`<a class="${cls}" href="${d.set}" target="_blank" rel="noopener">▶ Ouvir set</a>`:"";
+const media=d=>`<div class="media" data-id="${d.id}" style="--c:${d.c};--c2:${d.c2}" role="button" tabindex="0" aria-label="Detalhes de ${d.nome}">
+  ${d.foto?`<img src="${d.foto}" alt="${d.nome}">`:vinyl(d,"big")}${setBtn(d,"play")}</div>`;
+const genres=[...new Set(STYLES.flatMap(d=>d.generos))].sort((a,b)=>a.localeCompare(b,"pt"));
+const hasG=(d,g)=>g==="Todos"||d.generos.some(x=>x===g||x.includes(g));
+const state={ev:"Todos",genre:"Todos"};
+const brief={mode:"eu",formato:new Set(["Online"]),dias:new Set(),periodo:new Set(["Noite"]),tipo:"Casamento",idades:new Set(["20 a 35","35 a 50"]),estilos:new Set()};
+$("#footWa").textContent=WHATS_DJCLUB.replace(/^55(\d{2})(\d{4,5})(\d{4})$/,"($1) $2-$3");
+$("#footMail").textContent=EMAIL_DJCLUB;
+if(CANAL_YT)$("#footWa").insertAdjacentHTML("afterend",` · <a href="${CANAL_YT}" target="_blank" rel="noopener">Canal no YouTube</a>`);
+
+(()=>{const eq=$("#eq");for(let i=0;i<34;i++){const b=document.createElement("i");b.style.setProperty("--h",(30+Math.random()*70)+"%");b.style.animationDelay=(-Math.random()*1.1)+"s";b.style.animationDuration=(.7+Math.random()*.8)+"s";eq.appendChild(b)}})();
+
+/* ---------- fundo do topo ---------- */
+(()=>{
+  if(HERO_FOTO){$("#heroBg").innerHTML=`<img src="${HERO_FOTO}" alt="">`;document.querySelector(".hero-v2").classList.add("has-photo");return}
+  const cv=$("#stage"),ctx=cv.getContext("2d");
+  const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W,H,crowd=[];
+  function size(){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);
+    crowd=[];let x=-20;while(x<W+40){crowd.push({x,s:.8+Math.random()*.5,hand:Math.random()<.35,ph:Math.random()*6});x+=26+Math.random()*22}}
+  function beam(x,y,ang,len,w,col,a){ctx.save();ctx.translate(x,y);ctx.rotate(ang);const g=ctx.createLinearGradient(0,0,0,len);g.addColorStop(0,col.replace("A",a));g.addColorStop(1,col.replace("A",0));ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(-3,0);ctx.lineTo(3,0);ctx.lineTo(w,len);ctx.lineTo(-w,len);ctx.closePath();ctx.fill();ctx.restore()}
+  function frame(t){
+    t=t||0;ctx.clearRect(0,0,W,H);
+    const bx=W*.72,by=H*.62;
+    ctx.globalCompositeOperation="lighter";
+    const cols=["rgba(255,43,214,A)","rgba(139,44,255,A)","rgba(47,107,255,A)"];
+    for(let i=0;i<7;i++){const px=W*(.38+i*.1),sw=Math.sin(t/1600+i*1.3)*.5;beam(px,-10,sw,H*1.15,90+i*8,cols[i%3],.22)}
+    const halo=ctx.createRadialGradient(bx,by,10,bx,by,H*.6);halo.addColorStop(0,"rgba(255,43,214,.35)");halo.addColorStop(1,"rgba(255,43,214,0)");ctx.fillStyle=halo;ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation="source-over";
+    // DJ silhouette
+    ctx.fillStyle="#07030c";
+    const u=Math.min(H/600,1.4);
+    ctx.beginPath();ctx.arc(bx,by-120*u,26*u,0,7);ctx.fill();
+    ctx.beginPath();ctx.moveTo(bx-70*u,by-30*u);ctx.quadraticCurveTo(bx-62*u,by-92*u,bx,by-92*u);ctx.quadraticCurveTo(bx+62*u,by-92*u,bx+70*u,by-30*u);ctx.lineTo(bx+70*u,by);ctx.lineTo(bx-70*u,by);ctx.fill();
+    ctx.lineWidth=7*u;ctx.strokeStyle="#07030c";ctx.beginPath();ctx.arc(bx,by-122*u,31*u,Math.PI*1.05,Math.PI*1.95);ctx.stroke();
+    ctx.fillRect(bx-36*u,by-130*u,10*u,22*u);ctx.fillRect(bx+26*u,by-130*u,10*u,22*u);
+    const lift=still?0:Math.sin(t/300)*6*u;
+    ctx.beginPath();ctx.moveTo(bx+55*u,by-70*u);ctx.lineTo(bx+95*u,by-150*u+lift);ctx.lineTo(bx+110*u,by-146*u+lift);ctx.lineTo(bx+72*u,by-58*u);ctx.fill();
+    // booth
+    ctx.fillStyle="#0a0510";ctx.fillRect(bx-170*u,by-6*u,340*u,H);
+    const edge=ctx.createLinearGradient(bx-170*u,0,bx+170*u,0);edge.addColorStop(0,"#2f6bff");edge.addColorStop(.5,"#8b2cff");edge.addColorStop(1,"#ff2bd6");
+    ctx.fillStyle=edge;ctx.fillRect(bx-170*u,by-8*u,340*u,4*u);
+    ctx.globalAlpha=.55;for(let i=0;i<14;i++){const h=(still?.5:(.3+.7*Math.abs(Math.sin(t/220+i))))*30*u;ctx.fillRect(bx-120*u+i*17*u,by+30*u-h,9*u,h)}ctx.globalAlpha=1;
+    // crowd
+    ctx.fillStyle="#050208";
+    const base=H+6;
+    crowd.forEach(p=>{const bob=still?0:Math.sin(t/260+p.ph)*4,r=17*p.s;
+      ctx.beginPath();ctx.arc(p.x,base-78*p.s+bob,r,0,7);ctx.fill();
+      ctx.beginPath();ctx.ellipse(p.x,base-20*p.s+bob,34*p.s,44*p.s,0,0,7);ctx.fill();
+      if(p.hand){ctx.lineWidth=9*p.s;ctx.lineCap="round";ctx.strokeStyle="#050208";ctx.beginPath();ctx.moveTo(p.x+18*p.s,base-56*p.s+bob);ctx.lineTo(p.x+30*p.s,base-130*p.s+bob*2);ctx.stroke()}});
+    if(!still&&!document.hidden)requestAnimationFrame(frame);
+  }
+  size();frame(0);
+  addEventListener("resize",()=>{size();if(still)frame(0)});
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&!still)requestAnimationFrame(frame)});
+})();
+
+/* ---------- modal ---------- */
+let lastFocus=null;
+function openModal(html){lastFocus=document.activeElement;$("#mBody").innerHTML=html;$("#modal").hidden=false;document.body.style.overflow="hidden";$("#mClose").focus()}
+function closeModal(){$("#modal").hidden=true;document.body.style.overflow="";lastFocus&&lastFocus.focus&&lastFocus.focus()}
+$("#mClose").onclick=closeModal;
+$("#modal").addEventListener("click",e=>{
+  if(e.target.id==="modal")closeModal();
+  const q=e.target.closest("[data-add]");if(q){closeModal();if(!brief.estilos.has(q.dataset.add))toggleStyle(q.dataset.add);$("#festa").scrollIntoView({behavior:"smooth"})}
+  const c=e.target.closest("[data-copy]");if(c)copyText(c);
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#modal").hidden)closeModal()});
+
+function openProfile(id){
+  const d=STYLES.find(x=>x.id===id);
+  openModal(`
+   <div class="prof-head">${d.foto?`<img class="pfoto" src="${d.foto}" alt="">`:vinyl(d,"big")}<div><div class="eyebrow">Catálogo DJ Club</div><h3 id="mTitle" style="margin:6px 0">${d.nome}</h3>
+    <div class="tags">${d.generos.map(g=>`<span class="tag">${g}</span>`).join("")}</div></div></div>
+   <p class="bio">${d.bio}</p>
+   <div class="lbl">Como costuma ser a noite</div>
+   <div class="roteiro">${d.roteiro.map(r=>`<div class="rt"><b>${r[0]}</b><div class="bar"><i style="width:${r[2]*100}%"></i></div><code>${Math.round(r[2]*100)}%</code><span style="grid-column:1/-1;color:var(--muted);font-size:13px;margin-top:-4px">${r[1]}</span></div>`).join("")}</div>
+   <p class="meta" style="margin:0 0 18px">Ideal para: ${d.tipos.join(", ")}</p>
+   <div class="hero-cta"><button class="btn btn-hot" data-add="${d.id}">Adicionar à minha festa</button>${setBtn(d,"btn btn-ghost")}</div>`);
+}
+
+/* ---------- à la carte ---------- */
+function toggleStyle(id){
+  const d=STYLES.find(x=>x.id===id),add=!brief.estilos.has(id);
+  add?brief.estilos.add(id):brief.estilos.delete(id);
+  if(add&&brief.mode!=="eu")setMode("eu");
+  renderEstilos();update();
+}
+function renderEstilos(){
+  $("#estiloChips").innerHTML=STYLES.map(x=>`<button type="button" class="chip" data-v="${x.id}" aria-pressed="${brief.estilos.has(x.id)}">${x.nome}</button>`).join("");
+}
+$("#estiloChips").onclick=e=>{const b=e.target.closest(".chip");if(b)toggleStyle(b.dataset.v)};
+$("#idadeChips").innerHTML=IDADES.map(x=>`<button type="button" class="chip" data-v="${x}" aria-pressed="${brief.idades.has(x)}">${x}</button>`).join("");
+$("#idadeChips").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const v=b.dataset.v;brief.idades.has(v)?brief.idades.delete(v):brief.idades.add(v);b.setAttribute("aria-pressed",brief.idades.has(v));update()};
+function renderTipo(){
+  $("#tipoChips").innerHTML=EVENTS.map(x=>`<button type="button" class="chip" data-v="${x}" aria-pressed="${x===brief.tipo}">${x}</button>`).join("");
+  const prev=new Set([...document.querySelectorAll("#momentos input:checked")].map(i=>i.value));
+  $("#momentos").innerHTML=MOMENTOS[brief.tipo].map((m,i)=>`<label class="check"><input type="checkbox" id="mo-${i}" value="${m}" ${prev.has(m)||i<2?"checked":""}>${m}</label>`).join("");
+}
+$("#tipoChips").onclick=e=>{const b=e.target.closest(".chip");if(b){brief.tipo=b.dataset.v;renderTipo();update()}};
+function setTipo(t){brief.tipo=t;renderTipo();update()}
+$("#extras").innerHTML=EXTRAS.map((x,i)=>`<label class="check"><input type="checkbox" id="ex-${i}" value="${x}" ${i===0?"checked":""}>${x}</label>`).join("");
+const dt=new Date();dt.setMonth(dt.getMonth()+3);$("#data").value=dt.toISOString().slice(0,10);$("#data").min=new Date().toISOString().slice(0,10);
+$("#quick").innerHTML=EVENTS.map(e=>`<button type="button" class="chip" data-v="${e}" aria-pressed="false">${e}</button>`).join("");
+$("#quick").onclick=e=>{const b=e.target.closest(".chip");if(b){setTipo(b.dataset.v);$("#festa").scrollIntoView({behavior:"smooth"})}};
+
+/* modo: eu monto / montem pra mim */
+function setMode(m){brief.mode=m;
+  document.querySelectorAll(".mode").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===m));
+  document.querySelectorAll("[data-only]").forEach(g=>g.hidden=g.dataset.only!==m);
+  $("#pvTitle").textContent=m==="eu"?"Sua festa à la carte":"O DJ Club monta para você";update()}
+document.querySelector(".modes").onclick=e=>{const b=e.target.closest(".mode");if(b)setMode(b.dataset.mode)};
+$("#heroNos").onclick=()=>setMode("nos");
+const multiChips=(id,items,set)=>{const el=$(id);el.innerHTML=items.map(x=>`<button type="button" class="chip" data-v="${x}" aria-pressed="${set.has(x)}">${x}</button>`).join("");
+  el.onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const v=b.dataset.v;set.has(v)?set.delete(v):set.add(v);b.setAttribute("aria-pressed",set.has(v));update()}};
+multiChips("#diasChips",["Seg","Ter","Qua","Qui","Sex","Sáb"],brief.dias);
+multiChips("#periodoChips",["Manhã","Tarde","Noite"],brief.periodo);
+const CLIMA=["","Bem tranquilo","Animado sem exagero","Animado","Pista cheia","Pista pegando fogo"];
+const chosen=()=>STYLES.filter(s=>brief.estilos.has(s.id));
+function plan(){
+  const est=[...new Set(chosen().flatMap(s=>s.generos))],clima=+$("#clima").value;
+  const low=est.filter(g=>LOW.includes(g)),high=est.filter(g=>HIGH.includes(g)),mid=est.filter(g=>!LOW.includes(g)&&!HIGH.includes(g)&&g!=="Flashback");
+  const moms=[...document.querySelectorAll("#momentos input:checked")].map(i=>i.value);
+  const j=a=>a.slice(0,3).join(", ");
+  const b=[];
+  if(moms.includes("Cerimônia"))b.push(["Cerimônia","Instrumental e versões acústicas",.15]);
+  b.push([brief.tipo==="Corporativo"?"Recepção / networking":"Recepção e jantar",low.length?j(low)+" em clima leve":"Acústicos e versões suaves dos estilos escolhidos",.3]);
+  const esp=moms.filter(m=>m!=="Cerimônia"&&m!=="Saideira");
+  if(esp.length)b.push(["Momentos especiais",esp.join(" · "),.45]);
+  b.push(["Abertura da pista",(mid.length?j(mid):high.length?j(high):"Pop e hits do momento")+" para puxar a galera",.55+clima*.04]);
+  b.push(["Auge da noite",(high.length?j(high):mid.length?j(mid):"Os hits mais pedidos")+(high.length&&mid.length?" com "+mid[0]:""),.55+clima*.09]);
+  if(moms.includes("Saideira")||est.includes("Flashback"))b.push(["Saideira",est.includes("Flashback")?"Flashback e clássicos para cantar junto":"Clássicos que todo mundo canta",.7]);
+  return b;
+}
+function update(){
+  $("#climaOut").textContent=CLIMA[+$("#clima").value];
+  const ex=[...document.querySelectorAll("#extras input:checked")].map(i=>i.value);
+  const h=$("#horas").value||"?";
+  const pacote=[`DJ por ${h} h de música`,...chosen().map(s=>"Estilo "+s.nome),...ex];
+  if(brief.mode==="nos"){
+    $("#preview").innerHTML=`<div class="tags" style="margin-bottom:14px"><span class="tag">${brief.tipo}</span><span class="tag">${$("#conv").value||"?"} convidados</span><span class="tag">${h} h de música</span>${[...brief.idades].map(i=>`<span class="tag">${i}</span>`).join("")}<span class="tag">${CLIMA[+$("#clima").value]}</span></div>
+     ${(()=>{const mo=[...document.querySelectorAll("#momentos input:checked")].map(i=>i.value);return mo.length?`<div class="lbl" style="margin-bottom:6px">Momentos especiais</div><p style="margin:0 0 14px;font-size:14px">${mo.join(" · ")}</p>`:""})()}
+     <ul class="meet" style="padding-left:18px;margin:0"><li>Lemos o que você contou e montamos uma proposta com estilo, roteiro da noite e estrutura.</li><li>Escalamos o DJ disponível na sua data.</li><li>Gravamos uma playlist para a sua festa no canal do DJ Club.</li><li>Apresentamos tudo numa reunião online e ajustamos com você.</li></ul>
+     <div class="perfil"><span class="lbl">Reunião</span><strong>Online, por videochamada</strong>${[...brief.dias].join(", ")||"Qualquer dia"} · ${[...brief.periodo].join(", ")||"qualquer período"}</div>`;
+    return;
+  }
+  $("#preview").innerHTML=`<div class="lbl" style="margin-bottom:6px">Seu pacote</div><div class="tags" style="margin-bottom:14px">${pacote.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}</div><div class="lbl">Prévia da trilha</div>`+
+   plan().map(([t,s,e])=>`<div class="blk"><b>${t}</b><code>${Math.round(Math.min(e,1)*100)}% energia</code><span>${esc(s)}</span><div class="bar"><i style="width:${Math.min(e,1)*100}%"></i></div></div>`).join("")+
+   `<div class="perfil"><span class="lbl">Próximo passo</span><strong>Reunião online</strong>Apresentamos o orçamento para a sua data e a playlist no canal do DJ Club.</div>`;
+}
+$("#form").addEventListener("input",update);$("#form").addEventListener("change",update);
+
+function briefingText(code){
+  const v=id=>$("#"+id).value.trim();
+  const moms=[...document.querySelectorAll("#momentos input:checked")].map(i=>i.value);
+  const ex=[...document.querySelectorAll("#extras input:checked")].map(i=>i.value);
+  const dataBR=v("data")?new Date(v("data")+"T12:00").toLocaleDateString("pt-BR"):"a definir";
+  const L=[`*Pedido de proposta DJ Club ${code}*`,``,`Nome: ${v("nome")}`,`WhatsApp: ${v("whats")}`,``,
+   `Evento: ${brief.tipo}`,`Data: ${dataBR} · início ${v("inicio")||"?"} · ${v("horas")} h de música`,`Local: ${v("cidade")}`,`Convidados: ${v("conv")}`,
+   `Público: ${[...brief.idades].join(", ")||"-"}`,`Clima da pista: ${CLIMA[+v("clima")]}`,`Momentos: ${moms.join(", ")||"-"}`,
+   ``,`Modo: ${brief.mode==="eu"?"Montou à la carte":"Quer que o DJ Club monte"}`];
+  if(brief.mode==="eu"){
+    L.push(`Estilos: ${chosen().map(s=>s.nome).join(", ")||"-"}`);
+    if(v("falta"))L.push(`Não pode faltar: ${v("falta")}`);
+    if(v("proibido"))L.push(`Não tocar: ${v("proibido")}`);
+    L.push(`Estrutura: ${ex.join(", ")||"só o som"}`);
+    if(v("msg"))L.push(`Obs.: ${v("msg")}`);
+  }else{L.push(`Sobre a festa: ${v("conta")||"-"}`)}
+  L.push(``,`Reunião online: ${[...brief.dias].join(", ")||"qualquer dia"} · ${[...brief.periodo].join(", ")||"qualquer período"}`);
+  return L.join("\n");
+}
+function selectEl(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+function copyText(btn){
+  const el=$("#sumTxt");
+  const ok=()=>{btn.textContent="Copiado";setTimeout(()=>btn.textContent="Copiar resumo",1800)};
+  try{navigator.clipboard.writeText(el.textContent).then(ok,()=>selectEl(el))}catch(e){selectEl(el)}
+}
+
+$("#form").addEventListener("submit",e=>{
+  e.preventDefault();
+  let req=[["nome","seu nome"],["whats","seu WhatsApp"],["data","a data"],["cidade","a cidade e o local"]];
+  const miss=req.filter(([id])=>!$("#"+id).value.trim());
+  if(brief.mode==="nos"&&!$("#conta").value.trim())miss.push(["conta","como você imagina a festa"]);
+  if(miss.length){$("#err").textContent="Falta preencher: "+miss.map(m=>m[1]).join(", ")+".";$("#"+miss[0][0]).focus();return}
+  if($("#whats").value.replace(/\D/g,"").length<10){$("#err").textContent="Confira o WhatsApp: use DDD + número, por exemplo (11) 98888-7777.";$("#whats").focus();return}
+  $("#err").textContent="";
+  const code="DJC-"+Math.random().toString(36).slice(2,7).toUpperCase();
+  const txt=briefingText(code);
+  const url="https://wa.me/"+WHATS_DJCLUB+"?text="+encodeURIComponent(txt);
+  openModal(`<div class="done"><div class="eyebrow">Pedido pronto</div>
+    <h3 id="mTitle" style="font-size:24px;margin-top:10px">Falta só enviar, ${esc($("#nome").value.split(" ")[0])}!</h3>
+    <div class="code">${code}</div>
+    <p style="color:var(--muted);margin:0 auto;max-width:46ch">Toque no botão verde para mandar o pedido para o DJ Club no WhatsApp. Em até 24 h entramos em contato para marcar a reunião online.</p>
+    <div class="row"><a class="btn wa" href="${url}" target="_blank" rel="noopener">Enviar pelo WhatsApp</a><button class="btn btn-ghost" type="button" data-copy>Copiar resumo</button></div>
+    <div class="sum"><div class="sumtxt" id="sumTxt">${esc(txt)}</div></div>
+    <p class="fine">Se o WhatsApp não abrir, copie o resumo e mande para ${$("#footWa").textContent} ou para o e-mail ${EMAIL_DJCLUB}.</p></div>`);
+});
+$("#joinBtn").onclick=e=>{e.preventDefault();openModal(`<div class="eyebrow">Para DJs</div><h3 id="mTitle" style="font-size:22px;margin:10px 0">Toque no DJ Club</h3><p class="bio">Mande pelo WhatsApp ou por e-mail seu nome artístico, cidade, gêneros que toca, equipamento e um link de set. A curadoria responde em até 7 dias.</p><div class="sum" style="font-family:var(--mono)"><div style="user-select:all">WhatsApp ${$("#footWa").textContent}</div><div style="user-select:all">${EMAIL_DJCLUB}</div></div>`)};
+
+renderTipo();renderEstilos();update();
+</script>
+</body>
+</html>
