@@ -255,13 +255,21 @@ body{padding-bottom:90px}
 .chips-no .chip[aria-pressed="true"]{color:#fff;border-color:#ff5c8a;background:rgba(255,92,138,.16);box-shadow:inset 0 0 0 1px #ff5c8a;text-decoration:line-through;text-decoration-thickness:1.5px}
 .lbl-no{color:#ff8fb0}
 .tag-no{background:rgba(255,92,138,.16);color:#ffc2d3;text-decoration:line-through}
+.gal{position:relative;display:block;border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -40px rgba(255,43,214,.55)}
+.gal img{display:block;width:100%;height:auto;transition:transform .5s ease}
+.gal:hover img{transform:scale(1.02)}
+.gal-play{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity .25s;background:rgba(13,7,21,.25)}
+.gal:hover .gal-play,.gal:focus-visible .gal-play{opacity:1}
+.gal-cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+.yt{background:#e00;color:#fff}.yt:hover{background:#ff1a1a;transform:translateY(-1px)}
+.gal.off{pointer-events:none}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#topo" aria-label="DJ Club"><img src="logo.png" alt="DJ Club"></a>
-    <nav class="links"><a href="#como-funciona">Como funciona</a><a href="#festa">Monte sua festa</a></nav>
+    <nav class="links"><a href="#como-funciona">Como funciona</a><a href="#festa">Monte sua festa</a><a href="#galeria">Galeria de DJs</a></nav>
     <a class="btn btn-hot" href="#festa">Pedir orçamento</a>
   </div>
 </header>
@@ -365,6 +373,17 @@ body{padding-bottom:90px}
   </div>
 </section>
 
+<section class="block" id="galeria" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow">Canal oficial no YouTube</div><h2>Galeria de DJs</h2><p>Conheça os DJs do DJ Club tocando de verdade. Sets, festas e playlists no nosso canal.</p></div></div>
+    <a class="gal" id="galLink" href="#galeria" target="_blank" rel="noopener" aria-label="Abrir o canal do DJ Club no YouTube">
+      <img src="galeria.jpg" alt="DJ Club Oficial: galeria de DJs no YouTube" loading="lazy">
+      <span class="gal-play" aria-hidden="true"><svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.5 7.7A8.5 8.5 0 0 0 60.5 1.7C55.2.3 34 .3 34 .3s-21.2 0-26.5 1.4a8.5 8.5 0 0 0-6 6C.1 13 .1 24 .1 24s0 11 1.4 16.3a8.5 8.5 0 0 0 6 6c5.3 1.4 26.5 1.4 26.5 1.4s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.9 35 67.9 24 67.9 24s0-11-1.4-16.3z" fill="#f00"/><path d="M45 24 27 14v20z" fill="#fff"/></svg></span>
+    </a>
+    <div class="gal-cta"><a class="btn yt" id="galBtn" href="#galeria" target="_blank" rel="noopener">▶ Ver os DJs no YouTube</a><span class="fine" id="galSoon" hidden>Canal no ar em breve.</span></div>
+  </div>
+</section>
+
 <section class="wrap">
   <div class="join">
     <div><h2>Você é DJ?</h2><p>O DJ Club está montando o time. Se você toca em casamentos, aniversários e eventos e quer receber datas sem precisar correr atrás de cliente, fale com a gente.</p></div>
@@ -390,7 +409,7 @@ body{padding-bottom:90px}
 /* ===== Configurações do DJ Club ===== */
 const WHATS_DJCLUB="5511996610399";          // WhatsApp que recebe os pedidos (DDI + DDD + número)
 const EMAIL_DJCLUB="djclubfesta@gmail.com";
-const CANAL_YT="";
+const CANAL_YT="https://www.youtube.com/@djcluboficial";
 const HERO_FOTO="hero.jpg";                           // foto de fundo do topo (ex.: foto do DJ tocando num evento)                            // link do canal do DJ Club no YouTube
 
 /* Catálogo: cada estilo pode ter foto (foto) e link do set no canal (set) */
@@ -442,6 +461,8 @@ const GENEROS=["Sertanejo","Pagode","Samba","Forró","Piseiro","Arrocha","Axé",
 const brief={nao:new Set(),mode:"eu",formato:new Set(["Online"]),dias:new Set(),periodo:new Set(["Noite"]),tipo:"Casamento",idades:new Set(["20 a 35","35 a 50"]),estilos:new Set()};
 $("#footWa").textContent=WHATS_DJCLUB.replace(/^55(\d{2})(\d{4,5})(\d{4})$/,"($1) $2-$3");
 $("#footMail").textContent=EMAIL_DJCLUB;
+if(CANAL_YT){$("#galLink").href=CANAL_YT;$("#galBtn").href=CANAL_YT}
+else{$("#galLink").classList.add("off");$("#galLink").removeAttribute("target");$("#galBtn").hidden=true;$("#galSoon").hidden=false}
 if(CANAL_YT)$("#footWa").insertAdjacentHTML("afterend",` · <a href="${CANAL_YT}" target="_blank" rel="noopener">Canal no YouTube</a>`);
 
 (()=>{const eq=$("#eq");for(let i=0;i<34;i++){const b=document.createElement("i");b.style.setProperty("--h",(30+Math.random()*70)+"%");b.style.animationDelay=(-Math.random()*1.1)+"s";b.style.animationDuration=(.7+Math.random()*.8)+"s";eq.appendChild(b)}})();
